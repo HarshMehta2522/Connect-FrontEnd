@@ -3,11 +3,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import ChatIcon from '@mui/icons-material/Chat';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
+import {Link} from 'react-router-dom';
 export default function Topbar() {
   return (
     <div className="topbarContainer">
         <div className="topbarLeft">
-            <span className="logo">Social</span>
+            <Link style={{textDecoration:"none"}} to="/">
+
+            <span className="logo check">Social</span>
+            </Link>
         </div>
         <div className="topbarCenter">
             <div className="searchBar">
@@ -34,7 +38,7 @@ export default function Topbar() {
                     <span className="topbarIconBadge">1</span>
                 </div>
             </div>
-            <img src="/assests/person/1.jpeg" alt="Person's Img" className="topbarImg"/>
+            <img src="/assets/person/1.jpeg" alt="Person's Img" className="topbarImg"/>
         </div>
     </div>
   )

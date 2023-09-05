@@ -10,7 +10,7 @@ export default function Share() {
       <div className="shareTop">
         <img
           className="shareProfileImg"
-          src="/assests/person/1.jpeg"
+          src="/assets/person/1.jpeg"
           alt="shareImg"
         />
         <input placeholder="How u doin" className="shareInput" />
