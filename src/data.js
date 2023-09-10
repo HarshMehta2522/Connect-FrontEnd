@@ -113,7 +113,7 @@
     },
     {
       id: 8,
-      photo: " post/8.jpeg",
+      photo: "post/8.jpeg",
       date: "3 days ago",
       userId: 8,
       like: 15,
