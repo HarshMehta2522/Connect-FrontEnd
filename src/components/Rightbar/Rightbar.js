@@ -28,6 +28,7 @@ export default function Rightbar({ user }) {
   }, [user]);
 
   const handleClick = async () => {
+    // console.log(currentUser,user)
     try {
       if (followed===false) {
         await axios.put(`/users/${user._id}/unfollow`, {
@@ -71,7 +72,7 @@ export default function Rightbar({ user }) {
       <>
          {user.username !== currentUser.username && (
           <button className="rightbarFollowButton" onClick={handleClick}>
-            {followed ? "Follow" :"Unfollow" }
+            {followed ? "Unfollow" :"Follow" }
             {followed ?  <AddIcon />:<RemoveIcon /> }
           </button>
         )}

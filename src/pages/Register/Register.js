@@ -1,13 +1,13 @@
 import "./Register.css";
 import { useRef } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 export default function Register() {
   const username = useRef();
   const email = useRef();
   const password = useRef();
   const passwordAgain = useRef();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize useNavigate
   const handleClick = async (e) => {
     e.preventDefault();
     if (passwordAgain.current.value !== password.current.value) {
@@ -20,7 +20,7 @@ export default function Register() {
       };
       try {
         await axios.post("/auth/register", user);
-        navigate("/login");
+        navigate("/login"); // Use navigate to redirect to the login page
       } catch (err) {
         console.log(err);
       }
@@ -70,7 +70,12 @@ export default function Register() {
             <button className="loginButton" type="submit">
               Sign Up
             </button>
-            <button className="loginRegisterButton">Login into Account</button>
+            <button
+              className="loginRegisterButton"
+              onClick={() => navigate("/login")} // Use navigate on button click
+            >
+              Login into Account
+            </button>
           </form>
         </div>
       </div>

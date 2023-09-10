@@ -1,15 +1,20 @@
 import "./Login.css";
 import { useContext, useRef } from "react";
 import { loginCall } from "../../apiCalls";
-import {AuthContext} from "../../context/AuthContext"
-import CircularProgress from '@mui/material/CircularProgress';
+import { AuthContext } from "../../context/AuthContext";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
 export default function Login() {
   const email = useRef();
+  const navigate =useNavigate();
   const password = useRef();
-  const {user,isFetching,error,dispatch}=useContext(AuthContext)
+  const { user, isFetching, error, dispatch } = useContext(AuthContext);
   const handleClick = (e) => {
     e.preventDefault();
-    loginCall({ email:email.current.value, password:password.current.value },dispatch);
+    loginCall(
+      { email: email.current.value, password: password.current.value },
+      dispatch
+    );
   };
   return (
     <div className="login">
@@ -37,10 +42,23 @@ export default function Login() {
               className="loginInput"
               ref={password}
             />
-            <button className="loginButton" type="submit" disabled={isFetching} >{isFetching?<CircularProgress color="inherit" size="30px" />:"Log In"}</button>
+            <button className="loginButton" type="submit" disabled={isFetching}>
+              {isFetching ? (
+                <CircularProgress color="inherit" size="30px" />
+              ) : (
+                "Log In"
+              )}
+            </button>
             <span className="loginForgot">Forgot Password?</span>
-
-            <button className="loginButton" >{isFetching?<CircularProgress color="inherit" size="30px" />:"Create New Account"}</button>
+           
+              <button className="loginButton"  onClick={() => navigate("/register")}>
+                {isFetching ? (
+                  <CircularProgress color="inherit" size="30px" />
+                ) : (
+                  "Create New Account"
+                )}
+              </button>
+            
           </form>
         </div>
       </div>
