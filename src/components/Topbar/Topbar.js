@@ -36,8 +36,10 @@ export default function Topbar() {
             <span className="topbarIconBadge">1</span>
           </div>
           <div className="topbarIconItem">
-            <ChatIcon />
-            <span className="topbarIconBadge">1</span>
+            <Link to="/messenger" style={{ textDecoration: "none",color:"white"}}>
+              <ChatIcon />
+              <span className="topbarIconBadge">1</span>
+            </Link>
           </div>
           <div className="topbarIconItem">
             <NotificationsIcon />
@@ -45,17 +47,16 @@ export default function Topbar() {
           </div>
         </div>
         <Link to={`/profile/${user.username}`}>
-
-        <img
-          src={
-            user.profilePicture
-              ? PF + user.profilePicture
-              : PF + "person/default.jpeg"
-          }
-          alt="Person's Img"
-          className="topbarImg"
-        />
-        </Link> 
+          <img
+            src={
+              user.profilePicture
+                ? PF + user.profilePicture
+                : PF + "person/default.jpeg"
+            }
+            alt="Person's Img"
+            className="topbarImg"
+          />
+        </Link>
       </div>
     </div>
   );

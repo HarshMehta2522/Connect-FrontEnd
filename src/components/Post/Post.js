@@ -15,7 +15,6 @@ export default function Post({ post }) {
   const likeHandler = () => {
     try{
       axios.put("/post/"+post._id+"/like",{userId:currentUser._id})
-      console.log("hii")
     }catch(err){}
     setLike(isLiked ? like - 1 : like + 1);
     setIsLiked(!isLiked);
