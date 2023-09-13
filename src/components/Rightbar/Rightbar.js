@@ -3,7 +3,6 @@ import Online from "../Online/Online";
 import { Users } from "../../data";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { loginCall } from "../../apiCalls";
 import { Link } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -19,7 +18,7 @@ export default function Rightbar({ user }) {
 
   useEffect(() => {
     setFollowed(currentUser.followings.includes(user?._id));
-  }, [currentUser],user?._id);
+  }, [currentUser,user?._id]);
 
   useEffect(() => {
     const getFriends = async () => {
@@ -31,7 +30,7 @@ export default function Rightbar({ user }) {
       }
     };
     getFriends();
-  }, [user], currentUser);
+  }, [user, currentUser]);
 
   const handleClick = async () => {
     try {
