@@ -2,19 +2,24 @@ import "./Messenger.css";
 import Topbar from "../../components/Topbar/Topbar";
 import Conversation from "../../components/Conversations/Conversation";
 import Message from "../../components/Message/Message";
-import Rightbar from "../../components/Rightbar/Rightbar"
+import Rightbar from "../../components/Rightbar/Rightbar";
 import ChatOnline from "../../components/ChatOnline/ChatOnline";
 import { useContext, useEffect, useState, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
+
 export default function Messenger() {
   const [conversations, setConversations] = useState([]);
-  const [currentChat, setCurrentChat] = useState([]);
+  const [currentChat, setCurrentChat] = useState(null); // State for the selected conversation
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [shouldReloadConversations, setShouldReloadConversations] =
+    useState(false);
+
   const { user } = useContext(AuthContext);
   const scrollRef = useRef();
-  useEffect(() => {
+  
+  
     const getConversations = async () => {
       try {
         const res = await axios.get("/conversations/" + user._id);
@@ -23,20 +28,36 @@ export default function Messenger() {
         console.log(err);
       }
     };
+    // Messenger.js
+useEffect(() => {
+  if (shouldReloadConversations) {
     getConversations();
-  }, [user._id]);
+    setShouldReloadConversations(false); // Reset the state to prevent continuous reloading
+  }
+}, [shouldReloadConversations, getConversations,Messenger]);
+
 
   useEffect(() => {
     const getMessages = async () => {
-      try {
-        const res = await axios.get("/messages/" + currentChat?._id);
-        setMessages(res.data);
-      } catch (err) {
-        console.log(err);
+      if (currentChat) {
+        try {
+          const res = await axios.get("/messages/" + currentChat._id);
+          setMessages(res.data);
+        } catch (err) {
+          console.log(err);
+        }
       }
     };
     getMessages();
   }, [currentChat]);
+  useEffect(() => {
+    // Fetch conversations when the component mounts
+    getConversations();
+  }, []); // 
+  const handleChatClick = (conversation) => {
+    setCurrentChat(conversation); // Set the selected conversation
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const message = {
@@ -65,7 +86,8 @@ export default function Messenger() {
           <div className="chatMenuWrapper">
             <input placeholder="search for friends" className="chatMenuInput" />
             {conversations.map((c) => (
-              <div onClick={() => setCurrentChat(c)}>
+              <div onClick={() => handleChatClick(c)} key={c._id}>
+                {/* Pass the conversation to the click handler */}
                 <Conversation conversation={c} currentUser={user} />
               </div>
             ))}
@@ -112,7 +134,12 @@ export default function Messenger() {
         </div>
         <div className="chatOnline">
           <div className="chatMenuWrapper">
-            <Rightbar  />
+            <Rightbar
+              messenger={true}
+              getConversations={getConversations}
+              shouldReloadConversations={shouldReloadConversations}
+              setShouldReloadConversations={setShouldReloadConversations}
+            />
           </div>
         </div>
       </div>

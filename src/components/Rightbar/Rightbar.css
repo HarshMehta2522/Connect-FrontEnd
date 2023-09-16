@@ -139,3 +139,18 @@
   margin-right: 30px;
   margin-top: 5px;
 }
+.addToChatButton{
+  display: flex;
+  flex:3;
+  align-items:center;
+  justify-content:right;
+   margin-left: 200px;
+  color: black
+}
+.alertWrapper {
+position: fixed;
+margin-top: 60px;
+height: 30px;
+top:0;
+z-index: 200;
+}

@@ -7,8 +7,16 @@ import { Link } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { AuthContext } from "../../context/AuthContext";
+import Button from "@mui/material/Button";
+import { Alert, AlertTitle } from "@mui/material";
 
-export default function Rightbar({ user }) {
+export default function Rightbar({
+  user,
+  messenger,
+  getConversations,
+  shouldReloadConversations,
+  setShouldReloadConversations,
+}) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
   const [newFriends, setNewFriends] = useState([]);
@@ -16,10 +24,12 @@ export default function Rightbar({ user }) {
   const [followed, setFollowed] = useState(
     currentUser.followings.includes(user?._id)
   );
+  const [showAlert, setShowAlert] = useState(false); // State for showing the Alert
 
   useEffect(() => {
     setFollowed(currentUser.followings.includes(user?._id));
   }, [currentUser, user?._id]);
+
   useEffect(() => {
     const getnewFriends = async () => {
       try {
@@ -31,6 +41,7 @@ export default function Rightbar({ user }) {
     };
     getnewFriends();
   }, []);
+
   useEffect(() => {
     const getFriends = async () => {
       try {
@@ -45,7 +56,6 @@ export default function Rightbar({ user }) {
 
   const handleClick = async () => {
     try {
-      // console.log(followed,currentUser.followings,user?._id,currentUser.followings.includes(user?._id))
       if (followed === false) {
         await axios.put(`/users/${user._id}/follow`, {
           userId: currentUser._id,
@@ -68,7 +78,6 @@ export default function Rightbar({ user }) {
     }
   };
 
-  // Check if user data is in local storage and update the currentUser
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
@@ -76,15 +85,32 @@ export default function Rightbar({ user }) {
     }
   }, [dispatch]);
 
+  const handleAddToChat = async (receiverId, e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post("/conversations", {
+        sender: currentUser._id,
+        receiverId: receiverId,
+      });
+
+      if (response.status === 201) {
+        // Conversation already exists, show the alert
+        setShowAlert(true);
+      } else {
+        // Conversation doesn't exist, create a new one
+        setShouldReloadConversations(true);
+        console.log("New conversation created:", response.data);
+      }
+    } catch (error) {
+      console.error("Error creating/checking conversation:", error);
+    }
+  };
+
   const HomeRightbar = () => {
     return (
       <>
-        <h4 className="rightbarTitle">Onlin Friends</h4>
-        {/*
-          {Users.map((u) => (
-            <Online key={u.id} user={u} />
-          ))}
-         */}
+        <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="rightbarFriendList">
           {newFriends.map((newfriend) => (
             <Link
@@ -105,6 +131,17 @@ export default function Rightbar({ user }) {
                 <span className="rightbarNewFriendName">
                   {newfriend.username}
                 </span>
+                <div className="addToChatButton">
+                  {messenger && (
+                    <Button
+                      variant="contained"
+                      href="#contained-buttons"
+                      onClick={(e) => handleAddToChat(newfriend?._id, e)}
+                    >
+                      Chat
+                    </Button>
+                  )}
+                </div>
               </div>
             </Link>
           ))}
@@ -181,6 +218,19 @@ export default function Rightbar({ user }) {
       <div className="rightbarWrapper">
         {user ? <ProfileRightbar /> : <HomeRightbar />}
       </div>
+      <div className="alertWrapper">
+  {showAlert && (
+    <Alert
+      severity="info"
+      onClose={() => setShowAlert(false)}
+      className="rightbarAlert"
+    >
+      <AlertTitle>Info</AlertTitle>
+      This conversation already exists
+    </Alert>
+  )}
+</div>
+
     </div>
   );
 }
