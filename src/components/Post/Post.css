@@ -66,3 +66,16 @@
     cursor: pointer;
     border-bottom:1px dashed gray;
 }
+.menu-item{
+    color: black;
+    font-weight: 400;
+    list-style: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.menu-item:hover {
+    z-index: 5;
+    color: #2196F3; /* Change text color on hover (Blue color) */
+  }
+

@@ -11,6 +11,7 @@ import { AuthContext } from "../../context/AuthContext";
 export default function Rightbar({ user }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
+  const [newFriends, setNewFriends] = useState([]);
   const { user: currentUser, dispatch } = useContext(AuthContext);
   const [followed, setFollowed] = useState(
     currentUser.followings.includes(user?._id)
@@ -18,8 +19,18 @@ export default function Rightbar({ user }) {
 
   useEffect(() => {
     setFollowed(currentUser.followings.includes(user?._id));
-  }, [currentUser,user?._id]);
-
+  }, [currentUser, user?._id]);
+  useEffect(() => {
+    const getnewFriends = async () => {
+      try {
+        const newfriendList = await axios.get("/users/all");
+        setNewFriends(newfriendList.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getnewFriends();
+  }, []);
   useEffect(() => {
     const getFriends = async () => {
       try {
@@ -68,22 +79,40 @@ export default function Rightbar({ user }) {
   const HomeRightbar = () => {
     return (
       <>
-        <div className="birthdayContainer">
-          <img className="birthdayImg" src={`${PF}gift.png`} alt="" />
-          <span className="birthdayText">
-            <b> you </b> and <b>3 other </b> friends also have a birhtday today
-          </span>
-        </div>
         <h4 className="rightbarTitle">Onlin Friends</h4>
-        <ul className="rightbarFriendList">
+        {/*
           {Users.map((u) => (
             <Online key={u.id} user={u} />
+          ))}
+         */}
+        <ul className="rightbarFriendList">
+          {newFriends.map((newfriend) => (
+            <Link
+              to={"/profile/" + newfriend.username}
+              style={{ textDecoration: "none" }}
+              key={newfriend._id}
+            >
+              <div className="rightbarNewFriend">
+                <img
+                  className="rightbarNewFriendImg"
+                  src={
+                    newfriend.profilePicture
+                      ? PF + newfriend.profilePicture
+                      : PF + "person/default.jpeg"
+                  }
+                  alt=""
+                />
+                <span className="rightbarNewFriendName">
+                  {newfriend.username}
+                </span>
+              </div>
+            </Link>
           ))}
         </ul>
       </>
     );
   };
-  
+
   const ProfileRightbar = () => {
     return (
       <>
@@ -134,7 +163,9 @@ export default function Rightbar({ user }) {
                       }
                       alt=""
                     />
-                    <span className="rightbarFollowingName">{friend.username}</span>
+                    <span className="rightbarFollowingName">
+                      {friend.username}
+                    </span>
                   </div>
                 </Link>
               ))}

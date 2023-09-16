@@ -2,6 +2,7 @@ import "./Messenger.css";
 import Topbar from "../../components/Topbar/Topbar";
 import Conversation from "../../components/Conversations/Conversation";
 import Message from "../../components/Message/Message";
+import Rightbar from "../../components/Rightbar/Rightbar"
 import ChatOnline from "../../components/ChatOnline/ChatOnline";
 import { useContext, useEffect, useState, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
@@ -111,7 +112,7 @@ export default function Messenger() {
         </div>
         <div className="chatOnline">
           <div className="chatMenuWrapper">
-            <ChatOnline />
+            <Rightbar  />
           </div>
         </div>
       </div>

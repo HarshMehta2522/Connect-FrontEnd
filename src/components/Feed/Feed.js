@@ -8,6 +8,8 @@ import { useContext, useEffect, useState } from "react";
 export default function Feed({ username }) {
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
+  const [refreshFeed, setRefreshFeed] = useState(false);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -25,14 +27,14 @@ export default function Feed({ username }) {
     };
 
     fetchPosts();
-  }, [username, user._id]);
+  }, [username, user._id, refreshFeed]);
 
   return (
     <div className="feed">
       <div className="feedWrapper">
         {(!username||username ===user.username)  && <Share />}
         {posts.length > 0 ? (
-          posts.map((p) => <Post key={p._id} post={p} />)
+          posts.map((p) => <Post key={p._id} post={p} onPostChange={() => setRefreshFeed(true)}  />)
         ) : (
           <p>No posts to display</p>
         )}
