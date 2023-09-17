@@ -8,16 +8,13 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import WorkIcon from "@mui/icons-material/Work";
 import EventIcon from "@mui/icons-material/Event";
 import { AuthContext } from "../../context/AuthContext";
-
-// import { Users } from "../../data";
-// import Friends from "../Friends/Friends";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 export default function Sidebar() {
   const [friends, setFriends] = useState([]);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const { user: currentUser, dispatch } = useContext(AuthContext);
+  const { user: currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     const getFriends = async () => {
@@ -90,8 +87,9 @@ export default function Sidebar() {
               </Link>
             ))}
           </div>
-        </ul>
+        </ul>{friends.length>5&&
         <button className="sidebarButton">Show More</button>
+        }
         <hr className="sidebarHr" />
         <ul className="siderbarFriendList"></ul>
       </div>
