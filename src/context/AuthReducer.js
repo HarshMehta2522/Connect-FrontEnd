@@ -54,6 +54,13 @@ const AuthReducer = (state, action) => {
           ),
         },
       };
+      case "LOGOUT":
+        localStorage.removeItem("user"); // Clear user data from local storage
+        return {
+          user: null,
+          isFetching: false,
+          error: false,
+        };      
     default:
       return state;
   }

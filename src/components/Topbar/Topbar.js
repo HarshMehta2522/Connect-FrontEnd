@@ -2,13 +2,19 @@ import "./Topbar.css";
 import SearchIcon from "@mui/icons-material/Search";
 import ChatIcon from "@mui/icons-material/Chat";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
+import { Logout } from "../../context/AuthActions";
 import { AuthContext } from "../../context/AuthContext";
 export default function Topbar() {
-  const { user } = useContext(AuthContext);
+  const { user,dispatch } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const handleEvent=(e)=>{
+    dispatch(Logout());
+    // console.log("first")
+  }
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -27,8 +33,10 @@ export default function Topbar() {
       </div>
       <div className="topbarRight">
         <div className="topbarLinks">
-          <Link to="/" style={{textDecoration:"none"}}>
-            <span className="topbarLink" style={{color:"white"}}>HomePage</span>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <span className="topbarLink" style={{ color: "white" }}>
+              HomePage
+            </span>
           </Link>
           <span className="topbarLink">Timeline</span>
         </div>
@@ -50,6 +58,7 @@ export default function Topbar() {
             <NotificationsIcon />
             <span className="topbarIconBadge">1</span>
           </div>
+            <LogoutIcon className="logoutButton" onClick={handleEvent}/>
         </div>
         <Link to={`/profile/${user.username}`}>
           <img
