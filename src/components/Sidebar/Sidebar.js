@@ -34,12 +34,16 @@ export default function Sidebar() {
       <div className="sidebarWrapper">
         <ul className="sidebarList">
           <li className="sidebarListItem">
-            <RssFeedIcon className="sidebarIcon" />
-            <span className="siderbarListItemText">Feed</span>
+            <Link to="/" className="sidebarIconLink">
+              <RssFeedIcon className="sidebarIcon" />
+              <span className="siderbarListItemText">Feed</span>
+            </Link>
           </li>
           <li className="sidebarListItem">
+          <Link to="/messenger" className="sidebarIconLink">
             <ChatIcon className="sidebarIcon" />
             <span className="siderbarListItemText">Chats</span>
+            </Link>
           </li>
           <li className="sidebarListItem">
             <PlayCircleIcon className="sidebarIcon" />
@@ -87,9 +91,10 @@ export default function Sidebar() {
               </Link>
             ))}
           </div>
-        </ul>{friends.length>5&&
-        <button className="sidebarButton">Show More</button>
-        }
+        </ul>
+        {friends.length > 5 && (
+          <button className="sidebarButton">Show More</button>
+        )}
         <hr className="sidebarHr" />
         <ul className="siderbarFriendList"></ul>
       </div>

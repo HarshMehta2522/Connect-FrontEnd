@@ -21,11 +21,17 @@
   padding: 0;
   margin: 0;
   list-style: none;
+  text-decoration: none;
 }
 .sidebarListItem {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.sidebarIconLink{
+  text-decoration: none;
+  color: black;
 }
 .sidebarIcon {
   margin-right: 15px;
