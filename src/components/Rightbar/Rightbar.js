@@ -33,7 +33,7 @@ export default function Rightbar({
   useEffect(() => {
     const getnewFriends = async () => {
       try {
-        const newfriendList = await axios.get("/users/all");
+        const newfriendList = await axios.get("/users/all/"+currentUser._id);
         setNewFriends(newfriendList.data);
       } catch (err) {
         console.log(err);
@@ -110,7 +110,7 @@ export default function Rightbar({
   const HomeRightbar = () => {
     return (
       <>
-        <h4 className="rightbarTitle">Online Friends</h4>
+        <h4 className="rightbarTitle">Suggested Friends</h4>
         <ul className="rightbarFriendList">
           {newFriends.map((newfriend) => (
             <Link
