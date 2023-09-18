@@ -11,9 +11,8 @@ import { AuthContext } from "../../context/AuthContext";
 export default function Topbar() {
   const { user,dispatch } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const handleEvent=(e)=>{
+  const handleEvent=()=>{
     dispatch(Logout());
-    // console.log("first")
   }
   return (
     <div className="topbarContainer">
@@ -26,7 +25,7 @@ export default function Topbar() {
         <div className="searchBar">
           <SearchIcon className="searchIcon" />
           <input
-            placeholder="Serach for friend, post or vide"
+            placeholder="Search for Friends"
             className="searchInput"
           />
         </div>

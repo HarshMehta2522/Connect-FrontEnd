@@ -3,7 +3,6 @@ import Topbar from "../../components/Topbar/Topbar";
 import Conversation from "../../components/Conversations/Conversation";
 import Message from "../../components/Message/Message";
 import Rightbar from "../../components/Rightbar/Rightbar";
-import ChatOnline from "../../components/ChatOnline/ChatOnline";
 import { useContext, useEffect, useState, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
@@ -18,24 +17,22 @@ export default function Messenger() {
 
   const { user } = useContext(AuthContext);
   const scrollRef = useRef();
-  
-  
-    const getConversations = async () => {
-      try {
-        const res = await axios.get("/conversations/" + user._id);
-        setConversations(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    // Messenger.js
-useEffect(() => {
-  if (shouldReloadConversations) {
-    getConversations();
-    setShouldReloadConversations(false); // Reset the state to prevent continuous reloading
-  }
-}, [shouldReloadConversations, getConversations,Messenger]);
 
+  const getConversations = async () => {
+    try {
+      const res = await axios.get("/conversations/" + user._id);
+      setConversations(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  // Messenger.js
+  useEffect(() => {
+    if (shouldReloadConversations) {
+      getConversations();
+      setShouldReloadConversations(false); // Reset the state to prevent continuous reloading
+    }
+  }, [shouldReloadConversations, getConversations]);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -49,11 +46,16 @@ useEffect(() => {
       }
     };
     getMessages();
+    const interval = setInterval(getMessages, 1000); // 1000 milliseconds = 1 second
+
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(interval);
   }, [currentChat]);
+
   useEffect(() => {
     // Fetch conversations when the component mounts
     getConversations();
-  }, []); // 
+  }, []); //
   const handleChatClick = (conversation) => {
     setCurrentChat(conversation); // Set the selected conversation
   };
@@ -120,7 +122,7 @@ useEffect(() => {
                     }}
                     value={newMessage}
                   />
-                  <button className="chatSubmitButton" onClick={handleSubmit}>
+                  <button className="chatSubmitButton" onClick={handleSubmit} disabled={!newMessage.trim()}>
                     Send
                   </button>
                 </div>

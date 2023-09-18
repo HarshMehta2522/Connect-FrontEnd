@@ -1,6 +1,4 @@
 import "./Rightbar.css";
-import Online from "../Online/Online";
-import { Users } from "../../data";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -13,8 +11,6 @@ import { Alert, AlertTitle } from "@mui/material";
 export default function Rightbar({
   user,
   messenger,
-  getConversations,
-  shouldReloadConversations,
   setShouldReloadConversations,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
