@@ -14,12 +14,13 @@ import { useContext, useEffect, useState } from "react";
 export default function Sidebar() {
   const [friends, setFriends] = useState([]);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const { user: currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendList = await axios.get(
+        const friendList = await axios.get(BACKEND+
           "/users/friends/" + currentUser?._id
         );
         setFriends(friendList.data);

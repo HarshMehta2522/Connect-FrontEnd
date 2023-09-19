@@ -10,10 +10,11 @@ import { useParams } from "react-router";
 export default function Profile() {
   const username = useParams().username;
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const [user, setUser] = useState({});
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(`/users?username=${username}`);
+      const res = await axios.get(BACKEND+`/users?username=${username}`);
       setUser(res.data);
     };
     fetchUser();

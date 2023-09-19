@@ -7,6 +7,7 @@ export default function Register() {
   const email = useRef();
   const password = useRef();
   const passwordAgain = useRef();
+  const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const navigate = useNavigate(); // Initialize useNavigate
   const handleClick = async (e) => {
     e.preventDefault();
@@ -19,7 +20,7 @@ export default function Register() {
         password: password.current.value,
       };
       try {
-        await axios.post("/auth/register", user);
+        await axios.post(`${BACKEND}/auth/register, ${user}`);
         navigate("/login"); // Use navigate to redirect to the login page
       } catch (err) {
         console.log(err);

@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 
 export default function Feed({ username }) {
   const [posts, setPosts] = useState([]);
+  const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const { user } = useContext(AuthContext);
   const [refreshFeed, setRefreshFeed] = useState(false);
 
@@ -14,11 +15,11 @@ export default function Feed({ username }) {
     const fetchPosts = async () => {
       try {
         const response = username
-          ? await axios.get("/post/profile/" + username)
-          : await axios.get("post/timeline/" + user._id);
+          ? await axios.get(`${BACKEND}/post/profile/${username}`)
+          : await axios.get(`${BACKEND}/post/timeline/${user._id}`);
 
-        setPosts(response.data.sort((p1,p2)=>{
-          return new Date(p2.createdAt)-new Date(p1.createdAt) 
+        setPosts(response.data.sort((p1, p2) => {
+          return new Date(p2.createdAt) - new Date(p1.createdAt);
         }));
 
       } catch (error) {
@@ -32,9 +33,9 @@ export default function Feed({ username }) {
   return (
     <div className="feed">
       <div className="feedWrapper">
-        {(!username||username ===user.username)  && <Share />}
+        {(!username || username === user.username) && <Share />}
         {posts.length > 0 ? (
-          posts.map((p) => <Post key={p._id} post={p} onPostChange={() => setRefreshFeed(true)}  />)
+          posts.map((p) => <Post key={p._id} post={p} onPostChange={() => setRefreshFeed(true)} />)
         ) : (
           <p>No posts to display</p>
         )}

@@ -14,6 +14,7 @@ export default function Rightbar({
   setShouldReloadConversations,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const [friends, setFriends] = useState([]);
   const [newFriends, setNewFriends] = useState([]);
   const { user: currentUser, dispatch } = useContext(AuthContext);
@@ -29,7 +30,7 @@ export default function Rightbar({
   useEffect(() => {
     const getnewFriends = async () => {
       try {
-        const newfriendList = await axios.get("/users/all/"+currentUser._id);
+        const newfriendList = await axios.get(BACKEND+"/users/all/"+currentUser._id);
         setNewFriends(newfriendList.data);
       } catch (err) {
         console.log(err);
@@ -41,7 +42,7 @@ export default function Rightbar({
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendList = await axios.get("/users/friends/" + user?._id);
+        const friendList = await axios.get(BACKEND+"/users/friends/" + user?._id);
         setFriends(friendList.data);
       } catch (err) {
         console.log(err);
@@ -53,14 +54,14 @@ export default function Rightbar({
   const handleClick = async () => {
     try {
       if (followed === false) {
-        await axios.put(`/users/${user._id}/follow`, {
+        await axios.put(BACKEND+`/users/${user._id}/follow`, {
           userId: currentUser._id,
         });
 
         dispatch({ type: "UNFOLLOW", payload: user._id });
         dispatch({ type: "UPDATE_FOLLOWINGS", payload: user._id });
       } else if (followed === true) {
-        await axios.put(`/users/${user._id}/unfollow`, {
+        await axios.put(BACKEND+`/users/${user._id}/unfollow`, {
           userId: currentUser._id,
         });
 
@@ -85,7 +86,7 @@ export default function Rightbar({
     e.preventDefault();
 
     try {
-      const response = await axios.post("/conversations", {
+      const response = await axios.post(BACKEND+"/conversations", {
         sender: currentUser._id,
         receiverId: receiverId,
       });

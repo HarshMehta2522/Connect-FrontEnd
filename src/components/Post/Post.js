@@ -18,6 +18,7 @@ export default function Post({ post,onPostChange }) {
   const [user, setUser] = useState({});
   const { user: currentUser } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const BACKEND = process.env.REACT_APP_BACKEND_URL; 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -29,7 +30,7 @@ export default function Post({ post,onPostChange }) {
 
   const likeHandler = () => {
     try {
-      axios.put("/post/" + post._id + "/like", { userId: currentUser._id });
+      axios.put(BACKEND+"/post/" + post._id + "/like", { userId: currentUser._id });
     } catch (err) {}
     setLike(isLiked ? like - 1 : like + 1);
     setIsLiked(!isLiked);
@@ -41,7 +42,7 @@ export default function Post({ post,onPostChange }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(`/users?userId=${post.userId}`);
+      const res = await axios.get(BACKEND+`/users?userId=${post.userId}`);
       setUser(res.data);
     };
     fetchUser();
@@ -55,7 +56,7 @@ export default function Post({ post,onPostChange }) {
     e.preventDefault();
     try {
       // Send a DELETE request to your server to delete the post by its ID
-      await axios.delete(`/post/${post?._id}`, {
+      await axios.delete(BACKEND+`/post/${post?._id}`, {
         data: { userId: currentUser?._id },
       });
       onPostChange();
