@@ -20,7 +20,7 @@ export default function Register() {
         password: password.current.value,
       };
       try {
-        await axios.post(`${BACKEND}/auth/register, ${user}`);
+        await axios.post(BACKEND+"/auth/register", user);
         navigate("/login"); // Use navigate to redirect to the login page
       } catch (err) {
         console.log(err);
