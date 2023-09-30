@@ -1,14 +1,21 @@
 import "./Register.css";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
+
 export default function Register() {
   const username = useRef();
   const email = useRef();
   const password = useRef();
   const passwordAgain = useRef();
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+
   const handleClick = async (e) => {
     e.preventDefault();
     if (passwordAgain.current.value !== password.current.value) {
@@ -20,10 +27,24 @@ export default function Register() {
         password: password.current.value,
       };
       try {
-        await axios.post(BACKEND+"/auth/register", user);
-        navigate("/login"); // Use navigate to redirect to the login page
+        const response = await axios.post(BACKEND + "/auth/register", user);
+        if (response.status === 200) {
+          setError(""); // Clear error message
+          setSuccess("User registered successfully. Please log in.");
+          navigate("/login");
+        }
       } catch (err) {
-        console.log(err);
+        if (err.response && err.response.status === 500) {
+          // Display Material-UI Alert for internal server error
+          setError("User already exists.");
+          setSuccess(""); // Clear success message
+        } else if (err.response && err.response.data.error === "User already exists") {
+          // Display Material-UI Alert for user already exists
+          setError("User already exists. Please register with a different username or email.");
+          setSuccess(""); // Clear success message
+        } else {
+          console.log(err);
+        }
       }
     }
   };
@@ -71,9 +92,26 @@ export default function Register() {
             <button className="loginButton" type="submit">
               Sign Up
             </button>
+            <div className="alertContainer">
+              {error && (
+                <Alert severity="error" onClose={() => setError("")}>
+                  <AlertTitle>Error</AlertTitle>
+                  {error}
+                </Alert>
+              )}
+              {success && (
+                <Alert severity="success" onClose={() => setSuccess("")}>
+                  <AlertTitle>Success</AlertTitle>
+                  {success}
+                  <Button color="inherit" size="small" onClick={() => setSuccess("")}>
+                    UNDO
+                  </Button>
+                </Alert>
+              )}
+            </div>
             <button
               className="loginRegisterButton"
-              onClick={() => navigate("/login")} // Use navigate on button click
+              onClick={() => navigate("/login")}
             >
               Login into Account
             </button>
