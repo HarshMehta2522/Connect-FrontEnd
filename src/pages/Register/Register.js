@@ -31,7 +31,6 @@ export default function Register() {
         if (response.status === 200) {
           setError(""); // Clear error message
           setSuccess("User registered successfully. Please log in.");
-          navigate("/login");
         }
       } catch (err) {
         if (err.response && err.response.status === 500) {
@@ -103,9 +102,6 @@ export default function Register() {
                 <Alert severity="success" onClose={() => setSuccess("")}>
                   <AlertTitle>Success</AlertTitle>
                   {success}
-                  <Button color="inherit" size="small" onClick={() => setSuccess("")}>
-                    UNDO
-                  </Button>
                 </Alert>
               )}
             </div>

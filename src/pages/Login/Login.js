@@ -1,25 +1,55 @@
 import "./Login.css";
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { loginCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
 import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 import { useNavigate } from "react-router-dom";
+
 export default function Login() {
   const email = useRef();
   const navigate = useNavigate();
   const password = useRef();
+  const [error, setError] = useState("");
   const { user, isFetching, dispatch } = useContext(AuthContext);
-  const handleClick = (e) => {
+  const [loginError, setLoginError] = useState(""); // State to hold login error
+
+  const handleClick = async (e) => {
     e.preventDefault();
     try {
-      loginCall(
+      const response = await loginCall(
         { email: email.current.value, password: password.current.value },
         dispatch
       );
+
+      if (response && response.error) {
+        // Display Material-UI Alert for login error
+        setError("Wrong Password");
+        setLoginError("Login failed. Please check your credentials.");
+  
+        // Log the error variable
+      } else {
+        setLoginError("");
+        setError("Wrong Credential");
+        // Clear login error message
+      }
     } catch (err) {
-      console.log(err);
+      if (err.response && err.response.status === 502) {
+        // Display Material-UI Alert for internal server error
+        setError("Wrong Password.");
+      // Log the error variable
+      } else if (err.response && err.response.data.error === "User not found") {
+        // Display Material-UI Alert for user not found
+        setError("User not found");
+        
+      } else {
+        console.log(err);
+
+      }
     }
   };
+
   return (
     <div className="login">
       <div className="loginWrapper">
@@ -30,11 +60,14 @@ export default function Login() {
           </span>
         </div>
         <div className="loginRight">
-          {user && user.error  && (
-            <div className="errorMessage">
-              Login failed. Please check your credentials.
-            </div>
+        <div className="alertContainer">
+          {error && (
+            <Alert severity="error" onClose={() => setError("")}>
+              <AlertTitle>Error</AlertTitle>
+              {error}
+            </Alert>
           )}
+        </div>
 
           <form className="loginBox" onSubmit={handleClick}>
             <input

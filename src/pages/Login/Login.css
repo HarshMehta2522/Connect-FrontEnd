@@ -85,6 +85,11 @@
 .registerButton {
   text-decoration: none; /* Remove underline */
    /* Inherit text color from the parent */
-
-
+}
+.alertContainer{
+  position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999; 
 }
