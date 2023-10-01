@@ -4,8 +4,6 @@ import axios from "axios";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
-
 export default function Register() {
   const username = useRef();
   const email = useRef();

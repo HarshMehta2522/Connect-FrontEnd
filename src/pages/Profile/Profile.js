@@ -27,16 +27,32 @@ export default function Profile() {
         <div className="profileRight">
           <div className="profileRightTop">
             <div className="profileCover">
-              <img
-                className="profileCoverImg"
-                src={user.coverPicture?PF+user.coverPicture: PF + "post/defaultCover.jpeg "}
-                alt=""
-              />
-              <img
-                className="profileUserImg"
-                src={user.profilePicture? PF+user.profilePicture: PF + "person/default.jpeg"}
-                alt=""
-              />
+              {user && user.coverPicture ? (
+                <img
+                  className="profileCoverImg"
+                  src={user.coverPicture}
+                  alt="usercoverImg"
+                />
+              ) : (
+                <img
+                  className="profileCoverImg"
+                  src="https://res.cloudinary.com/dbvzq1grq/image/upload/v1696169703/person/pvl4qdcllhxat5dsxjrz.jpg"
+                  alt="defaultProfileImg"
+                />
+              )}
+              {user && user.profilePicture ? (
+                <img
+                  className="profileUserImg"
+                  src={user.profilePicture}
+                  alt="postprofileImg"
+                />
+              ) : (
+                <img
+                  className="profileUserImg"
+                  src="https://res.cloudinary.com/dbvzq1grq/image/upload/v1696169703/person/pvl4qdcllhxat5dsxjrz.jpg"
+                  alt="defaultProfileImg"
+                />
+              )}
             </div>
             <div className="profileInfo">
               <h4 className="profileInfoName">{user.username}</h4>

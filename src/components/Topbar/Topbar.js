@@ -10,7 +10,6 @@ import { Logout } from "../../context/AuthActions";
 import { AuthContext } from "../../context/AuthContext";
 export default function Topbar() {
   const { user,dispatch } = useContext(AuthContext);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const handleEvent=()=>{
     dispatch(Logout());
   }
@@ -60,15 +59,19 @@ export default function Topbar() {
             <LogoutIcon className="logoutButton" onClick={handleEvent}/>
         </div>
         <Link to={`/profile/${user.username}`}>
-          <img
-            src={
-              user.profilePicture
-                ? PF + user.profilePicture
-                : PF + "person/default.jpeg"
-            }
-            alt="Person's Img"
-            className="topbarImg"
-          />
+        {user && user.profilePicture ? (
+                <img
+                  className="topbarImg"
+                  src={user.profilePicture}
+                  alt="postprofileImg"
+                />
+              ) : (
+                <img
+                  className="topbarImg"
+                  src="https://res.cloudinary.com/dbvzq1grq/image/upload/v1696169703/person/pvl4qdcllhxat5dsxjrz.jpg"
+                  alt="defaultProfileImg"
+                />
+              )}
         </Link>
       </div>
     </div>

@@ -2,7 +2,7 @@ import "./Share.css";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import LabelIcon from "@mui/icons-material/Label";
 import RoomIcon from "@mui/icons-material/Room";
-import CancelIcon from '@mui/icons-material/Cancel';
+import CancelIcon from "@mui/icons-material/Cancel";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
@@ -21,19 +21,34 @@ export default function Share() {
       desc: desc.current.value,
     };
     if (file) {
-      const data = new FormData();
-      data.append("file", file);
-      newPost.img = file.name; // Use the original file name
+      // Use the Cloudinary API to upload the file
+      // Use the Cloudinary API to upload the file
+      const cloudinaryData = new FormData();
+      cloudinaryData.append("file", file);
+
       try {
-        await axios.post(BACKEND+"/upload", data);
-      } catch (err) {
-        console.log(err);
-      }
-      try {
-        await axios.post(BACKEND+"/post", newPost);
+        // Upload the file directly to Cloudinary with a preset
+        const cloudinaryResponse = await axios.post(
+          "https://api.cloudinary.com/v1_1/dbvzq1grq/image/upload",
+          cloudinaryData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            params: {
+              upload_preset: "jqlxtw6t",
+            },
+          }
+        );
+
+        // Get the URL of the uploaded image from Cloudinary
+        newPost.img = cloudinaryResponse.data.secure_url;
+
+        // Create a new post with the image URL
+        await axios.post(BACKEND + "/post", newPost);
         window.location.reload();
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
   };
@@ -41,15 +56,19 @@ export default function Share() {
   return (
     <div className="share">
       <div className="shareTop">
-        <img
-          className="shareProfileImg"
-          src={
-            user.profilePicture
-              ? PF + user.profilePicture
-              : PF + "person/default.jpeg"
-          }
-          alt="shareImg"
-        />
+      {user && user.profilePicture ? (
+                <img
+                  className="shareProfileImg"
+                  src={user.profilePicture}
+                  alt="postprofileImg"
+                />
+              ) : (
+                <img
+                  className="shareProfileImg"
+                  src="https://res.cloudinary.com/dbvzq1grq/image/upload/v1696169703/person/pvl4qdcllhxat5dsxjrz.jpg"
+                  alt="defaultProfileImg"
+                />
+              )}
         <input
           placeholder={"How u doin " + user.username + " ?"}
           className="shareInput"
@@ -60,7 +79,10 @@ export default function Share() {
       {file && (
         <div className="shareImgContainer">
           <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
-          <CancelIcon className="shareCancelImg" onClick={()=>setFile(null)}/>
+          <CancelIcon
+            className="shareCancelImg"
+            onClick={() => setFile(null)}
+          />
         </div>
       )}
       <form className="shareBottom" onSubmit={submitHandler}>

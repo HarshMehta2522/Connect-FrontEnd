@@ -120,8 +120,8 @@ export default function Rightbar({
                   className="rightbarNewFriendImg"
                   src={
                     newfriend.profilePicture
-                      ? PF + newfriend.profilePicture
-                      : PF + "person/default.jpeg"
+                      ?  newfriend.profilePicture
+                      : "https://res.cloudinary.com/dbvzq1grq/image/upload/v1696169703/person/pvl4qdcllhxat5dsxjrz.jpg"
                   }
                   alt=""
                 />
@@ -192,8 +192,8 @@ export default function Rightbar({
                       className="rightbarFollowingImg"
                       src={
                         friend.profilePicture
-                          ? PF + friend.profilePicture
-                          : PF + "person/default.jpeg"
+                          ? friend.profilePicture
+                          :  "https://res.cloudinary.com/dbvzq1grq/image/upload/v1696169703/person/pvl4qdcllhxat5dsxjrz.jpg"
                       }
                       alt=""
                     />

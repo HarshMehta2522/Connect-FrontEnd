@@ -3,9 +3,7 @@ import "./Conversation.css";
 import React, { useEffect, useState } from "react";
 
 export default function Conversation({ conversation, currentUser }) {
-  const [user, setUser] = useState(null);
-  const PF=process.env.REACT_APP_PUBLIC_FOLDER;
-  // const backend = process.env.REACT_APP_BACKEND_URL;
+  const [user, setUser] = useState(null)
   useEffect(() => {
     const friendId = conversation.members.find((m) => m !== currentUser._id);
     const getUser = async () => {
@@ -20,11 +18,19 @@ export default function Conversation({ conversation, currentUser }) {
   }, [currentUser, conversation]);
   return (
     <div className="conversation">
-      <img
-        className="conversationImg"
-        src={user?.profilePicture?PF+user.profilePicture:PF+"person/default.jpeg"}
-        alt=""
-      />
+      {user && user.profilePicture ? (
+                <img
+                  className="conversationImg"
+                  src={user.profilePicture}
+                  alt="postprofileImg"
+                />
+              ) : (
+                <img
+                  className="conversationImg"
+                  src="https://res.cloudinary.com/dbvzq1grq/image/upload/v1696169703/person/pvl4qdcllhxat5dsxjrz.jpg"
+                  alt="defaultProfileImg"
+                />
+              )}
       <span className="conversationName">{user?.username}</span>
     </div>
   );

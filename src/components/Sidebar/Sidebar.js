@@ -13,7 +13,6 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 export default function Sidebar() {
   const [friends, setFriends] = useState([]);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const { user: currentUser } = useContext(AuthContext);
 
@@ -78,15 +77,19 @@ export default function Sidebar() {
                 key={friend._id}
               >
                 <div className="sidebarFriends">
-                  <img
-                    className="sidebarFriendImg"
-                    src={
-                      friend.profilePicture
-                        ? PF + friend.profilePicture
-                        : PF + "person/default.jpeg"
-                    }
-                    alt=""
-                  />
+                {friend && friend.profilePicture ? (
+                <img
+                  className="sidebarFriendImg"
+                  src={friend.profilePicture}
+                  alt="postprofileImg"
+                />
+              ) : (
+                <img
+                  className="sidebarFriendImg"
+                  src="https://res.cloudinary.com/dbvzq1grq/image/upload/v1696169703/person/pvl4qdcllhxat5dsxjrz.jpg"
+                  alt="defaultProfileImg"
+                />
+              )}
                   <span className="sidebarFriendName">{friend.username}</span>
                 </div>
               </Link>

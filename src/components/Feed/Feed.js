@@ -37,7 +37,7 @@ export default function Feed({ username }) {
         {posts.length > 0 ? (
           posts.map((p) => <Post key={p._id} post={p} onPostChange={() => setRefreshFeed(true)} />)
         ) : (
-          <p>No posts to display</p>
+          <p>Start sharing your memories</p>
         )}
       </div>
     </div>

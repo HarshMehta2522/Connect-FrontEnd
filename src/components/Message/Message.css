@@ -31,3 +31,6 @@
   background-color: rgb(211, 211, 211);
     color: black;
 }
+.linkfix{
+  text-decoration: none;
+}
